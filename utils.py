@@ -1,4 +1,5 @@
 import os
+import pprint
 
 import requests
 from bs4 import BeautifulSoup
@@ -123,10 +124,12 @@ def extract_content_instagram(url):
         response = requests.get(url)
         response.raise_for_status()  # HTTP 오류 발생 시 예외 발생
         soup = BeautifulSoup(response.text, 'html.parser')
-        meta_tag = soup.find('meta', {'property': 'og:description'})
+        meta_tag = soup.find('meta', {'property': 'og:title'})
         if meta_tag:
             content = meta_tag['content']
-            return content
+            main_text = content.split('"')[1]
+            pprint.pprint(main_text)
+            return main_text
         else:
             return 'Content not found'
     except requests.RequestException as e:
